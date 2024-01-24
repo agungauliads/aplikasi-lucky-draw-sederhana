@@ -10,6 +10,37 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./fontawesome-free-6.5.1-web/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        @keyframes highlightWinner {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scrollAnimation {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-100%);
+            }
+        }
+
+        .scrolling-names {
+            animation: scrollAnimation 5s linear infinite;
+            /* Sesuaikan durasi animasi yang diinginkan */
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <body class="flex items-center justify-center bg-red-500 h-screen">
@@ -75,7 +106,7 @@
 
                 drawInterval = setInterval(() => {
                     animateRandomName(winnerContainer);
-                }, 200);
+                }, 30);
             } else {
                 drawButton.textContent = 'Draw Winner';
                 isDrawing = false;
@@ -94,7 +125,8 @@
                 const winnerIndex = Math.floor(Math.random() * participants.length);
                 const winner = participants[winnerIndex];
 
-                winnerContainer.innerHTML = `<p class="text-green-500 font-bold">Winner: ${winner}</p>`;
+                // Tambahkan kelas animasi pada nama pemenang
+                winnerContainer.innerHTML = `<p class="text-green-500 font-bold animate-pulse">Winner: ${winner}</p>`;
 
                 participants.splice(winnerIndex, 1);
 
@@ -102,6 +134,7 @@
                 startConfetti();
             }
         }
+
 
         function startConfetti() {
             // Konfigurasi efek confetti
@@ -157,8 +190,16 @@
         }
 
         function animateRandomName(container) {
-            container.innerHTML = `<p class="text-blue-500 font-bold">Drawing: ${participants[Math.floor(Math.random() * participants.length)]}</p>`;
+            const randomName = participants[Math.floor(Math.random() * participants.length)];
+            const scrollingNameElement = document.createElement('p');
+            scrollingNameElement.className = 'text-blue-500 font-bold scrolling-names';
+            scrollingNameElement.textContent = `Drawing: ${randomName}`;
+
+            // Bersihkan kontainer sebelum menambahkan elemen baru
+            container.innerHTML = '';
+            container.appendChild(scrollingNameElement);
         }
+
 
         function toggleFullscreen() {
             const fullscreenButton = document.getElementById('fullscreenButton');
